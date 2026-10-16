@@ -1,5 +1,5 @@
 # strata-xtx-rocm10 - instellingen. Wordt bij de eerste installatie gekopieerd naar /etc/strata-xtx-rocm10/xtx.conf.
-# Variant met ROCm 10 (TheRock-wheels). Past naast de ROCm 7-variant in dezelfde container: eigen map, eigen .venv,
+# Variant met ROCm 10 (systeem-ROCm uit AMD's apt-repo, alleen de gfx1100-pakketten, in /opt/rocm/...). Past naast de ROCm 7-variant in dezelfde container: eigen map, eigen .venv,
 # eigen service (strata-xtx-rocm10), dezelfde modelbestanden en dezelfde poort. Er draait er altijd maar één.
 # Wisselen:  systemctl disable --now strata-xtx-rocm10 && systemctl enable --now strata-xtx   (en omgekeerd)
 # Shell-syntax (wordt ge-"source"d door de scripts). Alles hier heeft een werkende standaardwaarde.
@@ -43,10 +43,10 @@ RESIDENT_HEADROOM_GIB=                    # leeg = upstream-standaard (4); zie A
 # --- build -------------------------------------------------------------------------------------------
 BUILD_JOBS=                               # leeg = alle cores van de container (patch 0001)
 EXTRA_CMAKE_ARGS=                         # bv. "-DSTRATA_ORCA_Q4KS_MMQ=ON" (patch 0001)
-# ROCm: leeg = setup's geteste TheRock-wheels in .venv (geen sudo, ~10 GB). Een eigen versie/index kan, maar dan
-# moet er een hipBLASLt-tabel bij die versie horen (xtx-tune-hipblaslt maakt er een).
-ROCM_VERSION=latest:10                     # latest:10 = nieuwste 10.x bij installatie (daarna vast); of een exacte versie
-ROCM_INDEX=                                # leeg = https://rocm.nightlies.amd.com/v2/gfx110X-dgpu/
+# ROCm 10 komt uit AMD's apt-repo (stable.repo.amd.com): amdrocm-core-dev<X.Y>-gfx1100 + amdrocm-blas(-dev).
+# De wheel-varianten (strata-xtx, strata-xtx-rocm714) gebruiken deze systeem-ROCm nooit.
+ROCM_SOURCE=apt                           # apt | wheel
+ROCM_APT=latest                           # latest = nieuwste 10.x bij installatie (daarna vast), of bv. 10.1
 
 # --- updates -----------------------------------------------------------------------------------------
 UPDATE_SMOKE_TIMEOUT=900                  # seconden die een nieuwe build krijgt om te laden en "Paris" te antwoorden
